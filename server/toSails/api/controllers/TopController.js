@@ -6,8 +6,6 @@
  */
 
 
-var WebSocketServer = require('ws').Server;
-
 module.exports = {
   index: function (req,res) {
     res.view("top");
