@@ -1,0 +1,20 @@
+# emacs
+*~
+\#*\#
+.\#*
+
+# OSX
+.DS_Store
+
+server/node_modules
+server/bower_components
+server/lib-cov
+*.seed
+*.log
+*.out
+*.pid
+server/npm-debug.log
+server/.netbeans
+server/nbproject
+server/.idea
+server/.node_history
