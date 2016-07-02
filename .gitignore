@@ -31,3 +31,4 @@ server/toSails/bower_components
 server/toSails/npm-debug.log
 server/toSails/.tmp
 server/toSails/dump.rdb
+server/toSails/config/apiconfig.js
