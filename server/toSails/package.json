@@ -21,7 +21,14 @@
     "include-all": "~0.1.6",
     "rc": "1.0.1",
     "sails": "~0.12.3",
-    "sails-disk": "~0.10.9"
+    "sails-disk": "~0.10.9",
+    "sails-hook-autoreload":"*",
+    "db-migrate": "*",
+    "sails-db-migrate": "*",
+    "sails-mysql": "*",
+    "googleapis": "*",
+    "google-auth-library": "*",
+    "grunt-cli": "*"
   },
   "scripts": {
     "debug": "node debug app.js",
