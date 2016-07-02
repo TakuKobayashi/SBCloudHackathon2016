@@ -1,7 +1,7 @@
 # emacs
 *~
-\#*\#
-.\#*
+*~
+*#
 
 # OSX
 .DS_Store
@@ -18,3 +18,15 @@ server/.netbeans
 server/nbproject
 server/.idea
 server/.node_history
+
+server/toSails/config/local.js
+server/toSails/npm-debug.log
+server/toSails/.netbeans
+server/toSails/nbproject
+server/toSails/.idea
+server/toSails/.node_history
+server/toSails/node_modules
+server/toSails/bower_components
+server/toSails/npm-debug.log
+server/toSails/.tmp
+server/toSails/dump.rdb
