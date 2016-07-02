@@ -20,6 +20,7 @@ server/.idea
 server/.node_history
 
 server/toSails/config/local.js
+server/toSails/config/connections.js
 server/toSails/npm-debug.log
 server/toSails/.netbeans
 server/toSails/nbproject
