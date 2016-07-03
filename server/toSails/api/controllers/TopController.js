@@ -58,7 +58,7 @@ module.exports = {
     var oauth2Client = getAuth2Client(req);
     getUser(req, res, function(user){
       if(!googleAuthenticate(res, user, oauth2Client)){
-
+      	res.view("top");
       }
     });
   },
@@ -78,6 +78,8 @@ module.exports = {
         }
         console.log(token);
         User.update({googleAccessToken: JSON.stringify(token)},{id: user.id}, function(err, user) {
+          console.log(user);
+          console.log(err);
           res.redirect('/top');
         });
       });
