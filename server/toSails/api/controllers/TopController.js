@@ -85,20 +85,22 @@ module.exports = {
         var geoCodeUrl = "http://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(currentEvents[0].location);
         request(geoCodeUrl, function (error, response, body) {
           var geocodeJson = JSON.parse(body);
+          var location = geocodeJson.geometry.location;
           console.log(geocodeJson);
+
+          var apiKey = sails.config.apiconfig.google.apiKey;
+          var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + location.lat.toString() + ',' + location.lng.toString() + '&radius=5000&types=food&sensor=false&language=ja&key=' + apiKey;
+          request(url, function (error, response, body) {
+            var parsedJson = JSON.parse(body);
+            var lotsNumber = Math.floor(Math.random() * parsedJson.results.length);
+            res.json(parsedJson.results[lotsNumber]);
+            if (!error && response.statusCode == 200) {
+              console.log(JSON.parse(body).name);
+            } else {
+              console.log('error: '+ response.statusCode);
+            }
+          })
         });
-        var apiKey = sails.config.apiconfig.google.apiKey;
-        var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=35.641463,139.698171&radius=5000&types=food&sensor=false&language=ja&key=' + apiKey;
-        request(url, function (error, response, body) {
-          var parsedJson = JSON.parse(body);
-          var lotsNumber = Math.floor(Math.random() * parsedJson.results.length);
-          res.json(parsedJson.results[lotsNumber]);
-          if (!error && response.statusCode == 200) {
-            console.log(JSON.parse(body).name);
-          } else {
-            console.log('error: '+ response.statusCode);
-          }
-        })
       });
     });
   },
