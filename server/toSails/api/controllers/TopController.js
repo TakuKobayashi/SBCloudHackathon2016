@@ -76,7 +76,13 @@ module.exports = {
             currentEvents.push(event);
           }
         }
+        if(currentEvents.length <= 0){
+          res.ok();
+          return;
+        }
+        console.log(currentEvents);
         var request = require('request');
+//        var geoCodeUrl = "http://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(currentEvents[0].);
         var apiKey = sails.config.apiconfig.google.apiKey;
         var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=35.641463,139.698171&radius=5000&types=food&sensor=false&language=ja&key=' + apiKey;
         request(url, function (error, response, body) {
