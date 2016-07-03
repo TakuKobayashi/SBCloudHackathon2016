@@ -82,7 +82,7 @@ module.exports = {
         request(url, function (error, response, body) {
           var parsedJson = JSON.parse(body);
           var lotsNumber = Math.floor(Math.random() * parsedJson.results.length);
-          res.json(parsedJson[lotsNumber]);
+          res.json(parsedJson.results[lotsNumber]);
           if (!error && response.statusCode == 200) {
             console.log(JSON.parse(body).name);
           } else {
