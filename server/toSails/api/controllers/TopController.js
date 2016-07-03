@@ -17,6 +17,9 @@ var getUser = function(req, res,callback){
   var createUser = function(r, cb){
   	var uuid = require('node-uuid');
     var token = uuid.v4();
+    if(req.cookies[host]){
+      token = req.cookies[host];
+    }
     User.create({token: token}).exec(function(err, user){
       r.cookie(host, user.token);
       cb(user);
