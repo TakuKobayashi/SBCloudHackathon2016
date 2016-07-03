@@ -28,7 +28,8 @@
     "sails-mysql": "*",
     "googleapis": "*",
     "google-auth-library": "*",
-    "grunt-cli": "*"
+    "grunt-cli": "*",
+    "node-uuid": "*"
   },
   "scripts": {
     "debug": "node debug app.js",

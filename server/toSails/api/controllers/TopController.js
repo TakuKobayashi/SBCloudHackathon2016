@@ -4,22 +4,51 @@ var google = require('googleapis');
 var googleAuth = require('google-auth-library');
 var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 
+var getAuth2Client = function(req){
+  var protocol = req.connection.encrypted?'https':'http';
+  var redirectUrl = protocol + '://' + req.headers.host + '/googleauth';
+  var auth = new googleAuth();
+  var googleApiInfo = sails.config.apiconfig.google;
+  return new auth.OAuth2(googleApiInfo.clientId, googleApiInfo.clientSecret, redirectUrl);
+}
+
+var createUser = function(callback){
+  var uuid = require('node-uuid');
+  var token = uuid.v4();
+  User.create({token: token}).exec(function(err, user){
+    console.log(err);
+    console.log(user);
+    callback(user);
+  });
+}
+
 module.exports = {
   index: function (req,res) {
-  	var protocol = req.connection.encrypted?'https':'http';
-    var redirectUrl = protocol + '://' + req.headers.host + '/googleauth';
-    var auth = new googleAuth();
-    var googleApiInfo = sails.config.apiconfig.google;
-    var oauth2Client = new auth.OAuth2(googleApiInfo.clientId, googleApiInfo.clientSecret, redirectUrl);
-    getNewToken(oauth2Client, function(auth){
-      console.log(auth);
-    });
+    var oauth2Client = getAuth2Client(req);
+    var host = req.headers.host;
 
-    res.view("top");
+    if(req.cookies[host]){
+      User.findOne({token: req.cookies[host]}).exec(function(err, user){
+        if(user){
+        }else{
+          createUser(function(user){
+            res.cookie(host, user.token);
+            res.view("top");
+          });
+        }
+      });
+    }else{
+      createUser(function(user){
+        res.cookie(host, user.token);
+        res.view("top");
+      });
+    }
+    console.log(req.cookies[host]);
   },
 
   googleauth: function (req,res) {
-    return res.redirect('/top');
+    console.log(req.params);
+    return res.redirect('http://47.88.138.17:1337/top');
   },
 };
 
@@ -46,4 +75,3 @@ var getNewToken = function(oauth2Client, callback) {
     });
   });
 }
-

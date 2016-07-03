@@ -4,11 +4,14 @@ var type = dbm.dataType;
 exports.up = function(db, callback) {
   db.createTable('user', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
-    googleAccessToken: { type: 'string', notNull: true },
+    token: { type: 'string', notNull: true },
+    googleAccessToken: { type: 'string'},
     updatedAt: 'datetime',
     createdAt: 'datetime'
   }, function(){
-    db.addIndex('user', 'user_google_access_token', 'googleAccessToken', callback);
+    db.addIndex('user', 'user_google_access_token', 'googleAccessToken', function(){
+      db.addIndex('user', 'user_token', 'token', callback);
+    });
   });
 };
 

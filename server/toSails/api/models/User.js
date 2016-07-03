@@ -6,9 +6,9 @@
  */
 
 module.exports = {
-
   attributes: {
-    googleAccessToken: { type: 'string'},
+    token: { type: 'string'},
+    googleAccessToken: { type: 'string'}
   }
 };
 
