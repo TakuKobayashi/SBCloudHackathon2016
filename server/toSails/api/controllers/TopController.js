@@ -39,6 +39,7 @@ var getUser = function(req, res,callback){
 }
 
 var googleAuthenticate = function(res, user, oauth2Client){
+  console.log(user.googleAccessToken);
   if(!user.googleAccessToken){
     var authUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
@@ -47,6 +48,8 @@ var googleAuthenticate = function(res, user, oauth2Client){
     res.redirect(authUrl);
     return true;
   }
+  oauth2Client.credentials = user.googleAccessToken;
+  console.log(oauth2Client);
   return false;
 }
 
@@ -55,7 +58,7 @@ module.exports = {
     var oauth2Client = getAuth2Client(req);
     getUser(req, res, function(user){
       if(!googleAuthenticate(res, user, oauth2Client)){
-        oauth2Client.credentials = token;
+        
       }
     });
   },
