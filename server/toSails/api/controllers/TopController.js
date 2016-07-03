@@ -77,11 +77,9 @@ module.exports = {
           return;
         }
         console.log(token);
-        user.googleAccessToken = JSON.stringify(token);
-        user.save(function(err){
-          console.log(err);
+        User.update({googleAccessToken: JSON.stringify(token)},{id: user.id}, function(err, user) {
+          res.redirect('/top');
         });
-        res.redirect('/top');
       });
     })
   },
