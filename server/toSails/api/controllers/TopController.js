@@ -87,7 +87,6 @@ module.exports = {
             console.log('error: '+ response.statusCode);
           }
         })
-        res.json(currentEvents);
       });
     });
   },
