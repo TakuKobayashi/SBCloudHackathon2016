@@ -6,7 +6,7 @@ var SCOPES = ['https://www.googleapis.com/auth/calendar.readonly'];
 
 var getAuth2Client = function(req){
   var protocol = req.connection.encrypted?'https':'http';
-  var redirectUrl = protocol + '://' + req.headers.host + '/googleauth';
+  var redirectUrl = 'http://taptappun.cloudapp.net:1337/top/googleauth';
   var auth = new googleAuth();
   var googleApiInfo = sails.config.apiconfig.google;
   return new auth.OAuth2(googleApiInfo.clientId, googleApiInfo.clientSecret, redirectUrl);
@@ -21,14 +21,16 @@ var createUser = function(res,callback){
   });
 }
 
-var googleAuth = function(req, user, oauth2Client){
+var googleAuthenticate = function(res, user, oauth2Client){
   if(!user.googleAccessToken){
     var authUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: SCOPES
     });
-    req.redirect(authUrl);
+    res.redirect(authUrl);
+    return true;
   }
+  return false;
 }
 
 module.exports = {
@@ -39,20 +41,23 @@ module.exports = {
     if(req.cookies[host]){
       User.findOne({token: req.cookies[host]}).exec(function(err, user){
         if(user){
+          if(!googleAuthenticate(res, user, oauth2Client)){
+            res.view("top");
+          }
         }else{
           createUser(res, function(user){
-          	googleAuth(req, user, oauth2Client);
-            res.view("top");
+            if(!googleAuthenticate(res, user, oauth2Client)){
+              res.view("top");
+            }
           });
         }
       });
     }else{
       createUser(res, function(user){
-      	googleAuth(req, user, oauth2Client);
+      	googleAuthenticate(res, user, oauth2Client);
         res.view("top");
       });
     }
-    console.log(req.cookies[host]);
   },
 
   googleauth: function (req,res) {
