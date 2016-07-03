@@ -47,7 +47,6 @@ var googleAuthenticate = function(res, user, oauth2Client){
     res.redirect(authUrl);
     return true;
   }
-  oauth2Client.credentials = JSON.parse(user.googleAccessToken);
   return false;
 }
 
@@ -56,8 +55,18 @@ module.exports = {
     var oauth2Client = getAuth2Client(req);
     getUser(req, res, function(user){
       if(!googleAuthenticate(res, user, oauth2Client)){
-      	res.view("top");
+        res.view("top");
       }
+    });
+  },
+
+  lot: function (req,res) {
+    var oauth2Client = getAuth2Client(req);
+    getUser(req, res, function(user){
+      oauth2Client.credentials = JSON.parse(user.googleAccessToken);
+      listEvents(oauth2Client, function(schedules){
+        res.json(schedules);
+      });
     });
   },
 
@@ -83,7 +92,7 @@ module.exports = {
   },
 };
 
-var listEvents = function(auth) {
+var listEvents = function(auth, callback) {
   var calendar = google.calendar('v3');
   calendar.events.list({
     auth: auth,
@@ -109,5 +118,6 @@ var listEvents = function(auth) {
         console.log('%s - %s', start, event.summary);
       }
     }
+    callback(response);
   });
 }
