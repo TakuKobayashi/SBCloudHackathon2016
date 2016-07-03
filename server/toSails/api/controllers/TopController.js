@@ -81,8 +81,8 @@ module.exports = {
         var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=35.641463,139.698171&radius=5000&types=food&sensor=false&language=ja&key=' + apiKey;
         request(url, function (error, response, body) {
           var parsedJson = JSON.parse(body);
-          var lots = Math.floor(Math.random() * parsedJson.results.length);
-          res.json(lots);
+          var lotsNumber = Math.floor(Math.random() * parsedJson.results.length);
+          res.json(parsedJson[lotsNumber]);
           if (!error && response.statusCode == 200) {
             console.log(JSON.parse(body).name);
           } else {
