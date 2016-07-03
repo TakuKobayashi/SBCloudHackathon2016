@@ -65,7 +65,18 @@ module.exports = {
     getUser(req, res, function(user){
       oauth2Client.credentials = JSON.parse(user.googleAccessToken);
       listEvents(oauth2Client, function(schedules){
-        res.json(schedules);
+        var events = schedules.items;
+        var currentEvents = [];
+        var now = new Date();
+        for (var i = 0; i < events.length; i++) {
+          var event = events[i];
+          var start = event.start.dateTime || event.start.date;
+          var end = event.end.dateTime || event.end.date;
+          if(Date.parse(start) < now.getTime() && now.getTime() < Date.parse(end)){
+            currentEvents.push(event);
+          }
+        }
+        res.json(currentEvents);
       });
     });
   },
@@ -105,18 +116,6 @@ var listEvents = function(auth, callback) {
     if (err) {
       console.log('The API returned an error: ' + err);
       return;
-    }
-    console.log(response);
-    var events = response.items;
-    if (events.length == 0) {
-      console.log('No upcoming events found.');
-    } else {
-      console.log('Upcoming 10 events:');
-      for (var i = 0; i < events.length; i++) {
-        var event = events[i];
-        var start = event.start.dateTime || event.start.date;
-        console.log('%s - %s', start, event.summary);
-      }
     }
     callback(response);
   });
