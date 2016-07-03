@@ -48,7 +48,7 @@ var googleAuthenticate = function(res, user, oauth2Client){
     res.redirect(authUrl);
     return true;
   }
-  oauth2Client.credentials = user.googleAccessToken;
+  oauth2Client.credentials = JSON.parse(user.googleAccessToken);
   console.log(oauth2Client);
   return false;
 }
@@ -58,7 +58,7 @@ module.exports = {
     var oauth2Client = getAuth2Client(req);
     getUser(req, res, function(user){
       if(!googleAuthenticate(res, user, oauth2Client)){
-        
+
       }
     });
   },
@@ -77,8 +77,10 @@ module.exports = {
           return;
         }
         console.log(token);
-        user.googleAccessToken = token;
-        user.save();
+        user.googleAccessToken = JSON.stringify(token);
+        user.save(function(err){
+          console.log(err);
+        });
         res.redirect('/top');
       });
     })
