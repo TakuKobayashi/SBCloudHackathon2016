@@ -77,7 +77,7 @@ module.exports = {
           return;
         }
         console.log(token);
-        User.update({googleAccessToken: JSON.stringify(token)},{id: user.id}, function(err, user) {
+        User.update({id: user.id},{googleAccessToken: JSON.stringify(token)}, function(err, user) {
           console.log(user);
           console.log(err);
           res.redirect('/top');
