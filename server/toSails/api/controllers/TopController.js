@@ -83,11 +83,12 @@ module.exports = {
         console.log(currentEvents);
         var request = require('request');
         var geoCodeUrl = "http://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(currentEvents[0].location);
-        request(geoCodeUrl, function (error, response, body) {
-          var geocodeJson = JSON.parse(body);
+        request(geoCodeUrl, function (e, r, b) {
+          var geocodeJson = JSON.parse(b);
           if(geocodeJson.results.length <= 0){
             return;
           }
+          request = require('request');
           var location = geocodeJson.results[0].geometry.location;
           console.log(geocodeJson);
 
