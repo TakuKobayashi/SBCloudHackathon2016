@@ -5,7 +5,7 @@ exports.up = function(db, callback) {
   db.createTable('user', {
     id: { type: 'int', primaryKey: true, autoIncrement: true },
     token: { type: 'string', notNull: true },
-    googleAccessToken: { type: 'string'},
+    googleAccessToken: { type: 'text'},
     updatedAt: 'datetime',
     createdAt: 'datetime'
   }, function(){

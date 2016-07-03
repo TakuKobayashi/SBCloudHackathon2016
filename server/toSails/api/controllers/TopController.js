@@ -50,19 +50,9 @@ var googleAuthenticate = function(res, user, oauth2Client){
 module.exports = {
   index: function (req,res) {
     var oauth2Client = getAuth2Client(req);
-
     getUser(req, res, function(user){
       if(!googleAuthenticate(res, user, oauth2Client)){
-        oauth2Client.getToken(user.googleAccessToken, function(err, token) {
-          if (err) {
-            console.log('Error while trying to retrieve access token', err);
-            return;
-          }
-          console.log(token);
-          oauth2Client.credentials = token;
-          listEvents(oauth2Client);
-          res.view("top");
-        });
+        oauth2Client.credentials = token;
       }
     });
   },
@@ -73,10 +63,18 @@ module.exports = {
   },
 
   redirectauth: function (req,res) {
+    var oauth2Client = getAuth2Client(req);
     getUser(req, res, function(user){
-      user.googleAccessToken = req.param("code");
-      user.save()
-      return res.redirect('/top');
+      oauth2Client.getToken(req.param("code"), function(err, token) {
+        if (err) {
+          console.log('Error while trying to retrieve access token', err);
+          return;
+        }
+        console.log(token);
+        user.googleAccessToken = token;
+        user.save();
+        res.redirect('/top');
+      });
     })
   },
 };
