@@ -58,6 +58,7 @@ module.exports = {
             console.log('Error while trying to retrieve access token', err);
             return;
           }
+          console.log(token);
           oauth2Client.credentials = token;
           listEvents(oauth2Client);
           res.view("top");
