@@ -85,7 +85,10 @@ module.exports = {
         var geoCodeUrl = "http://maps.googleapis.com/maps/api/geocode/json?address=" + encodeURIComponent(currentEvents[0].location);
         request(geoCodeUrl, function (error, response, body) {
           var geocodeJson = JSON.parse(body);
-          var location = geocodeJson.geometry.location;
+          if(geocodeJson.results.length <= 0){
+            return;
+          }
+          var location = geocodeJson.results[0].geometry.location;
           console.log(geocodeJson);
 
           var apiKey = sails.config.apiconfig.google.apiKey;
