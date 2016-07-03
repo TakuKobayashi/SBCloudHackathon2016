@@ -76,6 +76,17 @@ module.exports = {
             currentEvents.push(event);
           }
         }
+        var request = require('request');
+        var apiKey = sails.config.apiconfig.google.apiKey;
+        var url = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=35.641463,139.698171&radius=5000&types=food&sensor=false&language=ja&key=' + apiKey;
+        request(url, function (error, response, body) {
+          res.json(body);
+          if (!error && response.statusCode == 200) {
+            console.log(JSON.parse(body).name);
+          } else {
+            console.log('error: '+ response.statusCode);
+          }
+        })
         res.json(currentEvents);
       });
     });

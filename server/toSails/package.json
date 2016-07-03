@@ -29,7 +29,8 @@
     "googleapis": "*",
     "google-auth-library": "*",
     "grunt-cli": "*",
-    "node-uuid": "*"
+    "node-uuid": "*",
+    "geocoder":"*"
   },
   "scripts": {
     "debug": "node debug app.js",
