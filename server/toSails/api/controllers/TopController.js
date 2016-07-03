@@ -16,9 +16,19 @@ var createUser = function(res,callback){
   var uuid = require('node-uuid');
   var token = uuid.v4();
   User.create({token: token}).exec(function(err, user){
-  	res.cookie(host, user.token);
+    res.cookie(host, user.token);
     callback(user);
   });
+}
+
+var googleAuth = function(req, user, oauth2Client){
+  if(!user.googleAccessToken){
+    var authUrl = oauth2Client.generateAuthUrl({
+      access_type: 'offline',
+      scope: SCOPES
+    });
+    req.redirect(authUrl);
+  }
 }
 
 module.exports = {
@@ -31,12 +41,14 @@ module.exports = {
         if(user){
         }else{
           createUser(res, function(user){
+          	googleAuth(req, user, oauth2Client);
             res.view("top");
           });
         }
       });
     }else{
       createUser(res, function(user){
+      	googleAuth(req, user, oauth2Client);
         res.view("top");
       });
     }
