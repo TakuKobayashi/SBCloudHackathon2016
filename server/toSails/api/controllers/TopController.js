@@ -12,12 +12,11 @@ var getAuth2Client = function(req){
   return new auth.OAuth2(googleApiInfo.clientId, googleApiInfo.clientSecret, redirectUrl);
 }
 
-var createUser = function(callback){
+var createUser = function(res,callback){
   var uuid = require('node-uuid');
   var token = uuid.v4();
   User.create({token: token}).exec(function(err, user){
-    console.log(err);
-    console.log(user);
+  	res.cookie(host, user.token);
     callback(user);
   });
 }
@@ -31,15 +30,13 @@ module.exports = {
       User.findOne({token: req.cookies[host]}).exec(function(err, user){
         if(user){
         }else{
-          createUser(function(user){
-            res.cookie(host, user.token);
+          createUser(res, function(user){
             res.view("top");
           });
         }
       });
     }else{
-      createUser(function(user){
-        res.cookie(host, user.token);
+      createUser(res, function(user){
         res.view("top");
       });
     }
