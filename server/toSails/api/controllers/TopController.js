@@ -39,7 +39,6 @@ var getUser = function(req, res,callback){
 }
 
 var googleAuthenticate = function(res, user, oauth2Client){
-  console.log(user.googleAccessToken);
   if(!user.googleAccessToken){
     var authUrl = oauth2Client.generateAuthUrl({
       access_type: 'offline',
@@ -49,7 +48,6 @@ var googleAuthenticate = function(res, user, oauth2Client){
     return true;
   }
   oauth2Client.credentials = JSON.parse(user.googleAccessToken);
-  console.log(oauth2Client);
   return false;
 }
 
@@ -76,10 +74,8 @@ module.exports = {
           console.log('Error while trying to retrieve access token', err);
           return;
         }
-        console.log(token);
         User.update({id: user.id},{googleAccessToken: JSON.stringify(token)}, function(err, user) {
           console.log(user);
-          console.log(err);
           res.redirect('/top');
         });
       });
